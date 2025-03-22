@@ -2,14 +2,15 @@ const fs = require("fs");
 const path = require("path");
 
 const categories = ["easy", "medium", "hard"];
-const wikiDir = "wiki";
+const wikiDir = path.join(process.cwd(), "wiki");
 
+// Ensure wiki directory exists
 if (!fs.existsSync(wikiDir)) {
     fs.mkdirSync(wikiDir);
 }
 
 categories.forEach((category) => {
-    const dirPath = path.join(__dirname, "../../", category);
+    const dirPath = path.join(process.cwd(), category);
     if (!fs.existsSync(dirPath)) return;
 
     const files = fs.readdirSync(dirPath).filter((file) => file.endsWith(".md"));
@@ -25,4 +26,4 @@ categories.forEach((category) => {
     fs.writeFileSync(path.join(wikiDir, `${category}-problems.md`), content);
 });
 
-console.log("✅ Wiki pages updated!");
+console.log("✅ Wiki pages updated successfully!");
