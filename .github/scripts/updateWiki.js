@@ -2,11 +2,12 @@ const fs = require("fs");
 const path = require("path");
 
 const categories = ["easy", "medium", "hard"];
-const wikiDir = path.join(process.cwd(), "wiki");
+const wikiDir = path.join(process.cwd(), "wiki-repo");
 
 // Ensure wiki directory exists
 if (!fs.existsSync(wikiDir)) {
-    fs.mkdirSync(wikiDir);
+    console.error("❌ Error: Wiki repository not found. Make sure it's cloned.");
+    process.exit(1);
 }
 
 categories.forEach((category) => {
@@ -14,6 +15,8 @@ categories.forEach((category) => {
     if (!fs.existsSync(dirPath)) return;
 
     const files = fs.readdirSync(dirPath).filter((file) => file.endsWith(".md"));
+
+    if (files.length === 0) return;  // Avoid creating empty wiki pages
 
     let content = `# ${category.charAt(0).toUpperCase() + category.slice(1)} Problems\n\n`;
     content += "## List of Problems\n\n";
