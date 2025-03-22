@@ -1,0 +1,25 @@
+name: Update Wiki with New Problems
+
+on:
+  push:
+    branches:
+      - main  # Runs when changes are pushed to the main branch
+
+jobs:
+  update-wiki:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Generate Wiki Pages
+        run: |
+          node .github/scripts/updateWiki.js
+
+      - name: Commit & Push to Wiki
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add wiki/*
+          git commit -m "Auto-update wiki with new problems" || echo "No changes to commit"
+          git push || echo "No changes to push"
