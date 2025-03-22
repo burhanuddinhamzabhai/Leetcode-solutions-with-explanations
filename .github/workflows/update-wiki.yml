@@ -12,14 +12,17 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Clone Wiki Repository
+        run: |
+          git clone https://github.com/${{ github.repository }}.wiki.git wiki-repo
+
       - name: Generate Wiki Pages
         run: |
-          node .github/scripts/updateWiki.js
+          mkdir -p wiki-repo  # Ensure the folder exists
+          node .github/scripts/updateWiki.js  # Run the script to generate wiki pages
 
       - name: Push Changes to Wiki
         run: |
-          git clone https://github.com/${{ github.repository }}.wiki.git wiki-repo
-          cp -r wiki/* wiki-repo/
           cd wiki-repo
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
